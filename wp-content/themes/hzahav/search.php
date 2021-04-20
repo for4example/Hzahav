@@ -1,0 +1,156 @@
+<?php 
+get_header();?>
+    <section id="search-project-single">
+        <div class="container">
+            <div class="search-single">
+                <div class="search-single__title">
+                    <h2 class="main-title"><?php echo get_theme_mod('search-text');?></h2>
+                    <p class="main-text"><?php echo get_theme_mod('search-text-s');?></p>
+                </div>
+                <div class="search-single__box">
+                    <div class="search-box">
+                        <div class="search-box__content flex-direction">
+                            <div class="search-box__item">
+                                <h2>Area</h2>
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select">
+                                        <div class="custom-select__trigger">
+                                            <span>Tesla</span>
+                                        </div>
+                                        <div class="custom-options">
+                                            <span class="custom-option selected" data-value="tesla">Tesla</span>
+                                            <span class="custom-option" data-value="volvo">Volvo</span>
+                                            <span class="custom-option" data-value="mercedes">Mercedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="search-box__item">
+                                <h2>Religious Character</h2>
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select">
+                                        <div class="custom-select__trigger">
+                                            <span>Tesla</span>
+                                        </div>
+                                        <div class="custom-options">
+                                            <span class="custom-option selected" data-value="tesla">Tesla</span>
+                                            <span class="custom-option" data-value="volvo">Volvo</span>
+                                            <span class="custom-option" data-value="mercedes">Mercedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="search-box__item">
+                                <h2>House size</h2>
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select">
+                                        <div class="custom-select__trigger">
+                                            <span>Tesla</span>
+                                        </div>
+                                        <div class="custom-options">
+                                            <span class="custom-option selected" data-value="tesla">Tesla</span>
+                                            <span class="custom-option" data-value="volvo">Volvo</span>
+                                            <span class="custom-option" data-value="mercedes">Mercedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="search-box__item">
+                                <h2>Price starting</h2>
+                                <div class="custom-select-wrapper">
+                                    <div class="custom-select">
+                                        <div class="custom-select__trigger">
+                                            <span>Tesla</span>
+                                        </div>
+                                        <div class="custom-options">
+                                            <span class="custom-option selected" data-value="tesla">Tesla</span>
+                                            <span class="custom-option" data-value="volvo">Volvo</span>
+                                            <span class="custom-option" data-value="mercedes">Mercedes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="search__input">
+                                <input type="submit" value="Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- PROJECT BLOCK -->
+<section id="project" class="<?php if( is_search() ){ echo 'single-search';};?>">
+        <div class="container">
+            <div class="project-content">
+                    <div class="project-content__blocks flex-direction wrap">
+                    <?php 
+                        $args = array(
+                        'post_type'=> 'project',
+                        'posts_per_page' => 9,
+                        'order'    => 'ASC'
+                        );              
+                        $the_query = new WP_Query( $args );
+                        if($the_query->have_posts() ) : 
+                        while ( $the_query->have_posts() ) : 
+                        $the_query->the_post();
+                    ?>
+                        <div class="project-content__block-item">
+                            <div class="block-image">
+                                <?php $image = get_field('block_top_image');?>
+                                <img class="sircle-img" src="<?php echo $image['url'];?>" alt="<?php echo $image['alt'];?>">
+                                <img src="<?php echo get_the_post_thumbnail_url();?>" alt="img">
+                            </div>
+                            <div class="block-content">
+                                <div class="block-content-main">
+                                    <div class="block-title">
+                                        <a href="<?php echo get_permalink();?>"><?php the_title();?></a>
+                                        <p><?php the_excerpt();?></p>
+                                    </div>
+                                    <div class="block-content-about flex-direction wrap">
+                                    <?php if( have_rows('blocks') ):
+                                        while( have_rows('blocks') ): the_row(); ?>
+                                        <?php $image = get_sub_field('blocks_image');?>
+                                        <div class="block-content-about__item flex-direction">
+                                            <img src="<?php echo $image['url'];?>" alt="<?php echo $image['alt'];?>">
+                                            <span><?php the_sub_field('block_text');?></span>
+                                        </div>
+                                    <?php endwhile; endif; ?>
+                                    </div>
+                                    <a class="content-block__link" href="<?php echo get_permalink();?>">Find out more</a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endwhile; endif; wp_reset_query(); ?>
+                    </div>
+                    <script>
+  var ajaxurl = '<?php echo site_url() ?>/wp-admin/admin-ajax.php';
+  var posts = '<?php echo serialize($the_query->query_vars); ?>';
+  var current_page = <?php echo (get_query_var('paged')) ? get_query_var('paged') : 1; ?>;
+  var max_page = '<?php echo $the_query->max_num_pages; ?>';
+  </script>
+                    <?php
+// don't display the button if there are not enough posts
+if (  $the_query->max_num_pages > 1 )
+	echo '<input type="submit" class="button-load-more misha_loadmore" value="View more">'; // you can use <a> as well
+?>
+     
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-block blue-section">
+        <div class="container">
+            <div class="content-grey">
+                <div class="content-grey__title">
+                    <h2 class="main-title-block text-colored"><?php echo get_theme_mod('section-contact');?></h2>
+                    <hr class="main-line">
+                    <p class="main-text-block text-colored"><?php echo get_theme_mod('section-contact-sub');?></p>
+                    <a href="<?php echo get_theme_mod('section-contact-link');?>" class="button-color"><?php echo get_theme_mod('section-contact-button');?></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<?php get_footer();?>
